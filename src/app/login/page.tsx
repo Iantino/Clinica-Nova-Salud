@@ -155,6 +155,15 @@ export default function LoginPage() {
                 </p>
               )}
 
+            <div className="-mt-1 flex justify-end">
+              <Link
+                href="/recuperar-contrasena"
+                className="text-sm font-semibold text-[#075344] underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-hoja/40"
+              >
+                ¿Olvidaste tu contraseña?
+              </Link>
+            </div>
+
             <button
               type="submit"
               disabled={enviando}

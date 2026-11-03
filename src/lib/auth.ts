@@ -17,6 +17,20 @@ export function iniciarSesion(correo: string, password: string) {
   });
 }
 
+export function solicitarRestablecimiento(correo: string) {
+  return api<{ mensaje: string }>("/api/auth/solicitar-restablecimiento", {
+    method: "POST",
+    body: JSON.stringify({ correo }),
+  });
+}
+
+export function restablecerContrasena(token: string, password: string) {
+  return api<{ mensaje: string }>("/api/auth/restablecer-contrasena", {
+    method: "POST",
+    body: JSON.stringify({ token, password }),
+  });
+}
+
 export function cerrarSesion() {
   return api<void>("/api/auth/logout", { method: "POST" });
 }
