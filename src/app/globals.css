@@ -14,9 +14,89 @@
 }
 
 body {
-  background: var(--color-papel);
+  background: #f1f8f5;
   color: var(--color-tinta);
   font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+.sidebar-surface {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: linear-gradient(155deg, #06352e 0%, #075044 54%, #063a32 100%);
+}
+
+.sidebar-surface::before,
+.sidebar-surface::after {
+  position: absolute;
+  z-index: -1;
+  content: "";
+  pointer-events: none;
+}
+
+.sidebar-surface::before {
+  width: 23rem;
+  height: 23rem;
+  left: -13rem;
+  top: 34%;
+  border: 1px solid rgb(188 255 226 / 9%);
+  border-radius: 50%;
+  box-shadow: 0 0 0 2rem rgb(188 255 226 / 3%), 0 0 0 4rem rgb(188 255 226 / 2%);
+}
+
+.sidebar-surface::after {
+  width: 19rem;
+  height: 19rem;
+  right: -12rem;
+  bottom: -10rem;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgb(54 202 160 / 25%), transparent 68%);
+}
+
+.app-canvas {
+  min-height: 100dvh;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 96% 3%, rgb(196 239 222 / 50%), transparent 29rem),
+    radial-gradient(ellipse at 0% 100%, rgb(224 244 234 / 48%), transparent 38rem),
+    linear-gradient(135deg, #f5faf8 0%, #fbfdfc 54%, #eff8f4 100%);
+}
+
+.app-watermark {
+  position: absolute;
+  top: -5rem;
+  right: -4rem;
+  width: min(35vw, 34rem);
+  aspect-ratio: 1;
+  opacity: 0.035;
+  pointer-events: none;
+  background: url("/clinica-nova-salud-logo-transparente.png") center / contain no-repeat;
+  filter: grayscale(1);
+}
+
+input:not([type="checkbox"]):not([type="radio"]),
+select,
+textarea {
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+input:not([type="checkbox"]):not([type="radio"]):focus,
+select:focus,
+textarea:focus {
+  border-color: #38876a;
+  outline: none;
+  box-shadow: 0 0 0 3px rgb(56 135 106 / 14%);
+}
+
+.control-icono:focus {
+  border-color: transparent;
+  outline: none;
+  box-shadow: none;
+}
+
+::selection {
+  color: #07392f;
+  background: #c9f0df;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -25,4 +105,46 @@ body {
   *::after {
     transition-duration: 0.01ms !important;
   }
+}
+
+@media (max-width: 1023px) {
+  .app-canvas { min-height: calc(100dvh - 3.5rem); }
+  .app-watermark { width: min(68vw, 24rem); top: -2rem; right: -6rem; }
+}
+@media print {
+  @page { size: letter; margin: 14mm 16mm; }
+  html, body { min-height: 0 !important; background: #fff !important; }
+  body { margin: 0 !important; color: #111 !important; font-size: 10pt; }
+  body:has(.receta-imprimible) * { visibility: hidden; }
+  body:has(.receta-imprimible) .app-shell { display: block !important; min-height: 0 !important; }
+  body:has(.receta-imprimible) .app-shell > header,
+  body:has(.receta-imprimible) .app-shell > aside,
+  body:has(.receta-imprimible) .app-watermark { display: none !important; }
+  body:has(.receta-imprimible) .app-canvas {
+    display: block !important;
+    position: static !important;
+    width: 100% !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    background: #fff !important;
+  }
+  body:has(.receta-imprimible) .app-canvas > div { position: static !important; }
+  body:has(.receta-imprimible) .receta-imprimible,
+  body:has(.receta-imprimible) .receta-imprimible * { visibility: visible; }
+  .receta-imprimible {
+    position: static !important;
+    width: auto !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    border: 0 !important;
+    box-shadow: none !important;
+  }
+  .receta-imprimible header,
+  .receta-imprimible section,
+  .receta-imprimible li,
+  .receta-imprimible > div { break-inside: avoid; }
+  .receta-imprimible ol { list-style: decimal; padding-left: 1.5rem; }
 }

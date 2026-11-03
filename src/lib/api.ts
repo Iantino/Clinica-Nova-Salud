@@ -1,19 +1,25 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? (process.env.NODE_ENV === "production" ? "" : "http://localhost:4000");
 
 export type ErrorCampo = { campo: string; mensaje: string };
 
 export class ApiError extends Error {
   status: number;
   errores?: ErrorCampo[];
+  datos: Record<string, unknown>;
 
-  constructor(message: string, status: number, errores?: ErrorCampo[]) {
+  constructor(
+    message: string,
+    status: number,
+    errores?: ErrorCampo[],
+    datos?: Record<string, unknown>
+  ) {
     super(message);
     this.status = status;
     this.errores = errores;
+    this.datos = datos ?? {};
   }
 }
 
-// Llama a la API enviando siempre la cookie de sesión
 export async function api<T>(ruta: string, opciones: RequestInit = {}): Promise<T> {
   let respuesta: Response;
 
@@ -38,7 +44,8 @@ export async function api<T>(ruta: string, opciones: RequestInit = {}): Promise<
     throw new ApiError(
       datos.message ?? "Ocurrió un error inesperado.",
       respuesta.status,
-      datos.errores
+      datos.errores,
+      datos.datos
     );
   }
 
