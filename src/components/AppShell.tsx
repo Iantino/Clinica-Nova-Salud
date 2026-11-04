@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { SesionProvider, useSesion } from "@/lib/sesion";
@@ -19,7 +19,7 @@ function Menu({ alNavegar }: { alNavegar?: () => void }) {
   const ruta = usePathname();
 
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex min-h-full flex-col">
       <div className="relative flex justify-center px-5 pt-7 pb-2">
         <BrandLogo size={188} />
       </div>
@@ -67,6 +67,22 @@ function Menu({ alNavegar }: { alNavegar?: () => void }) {
 function Estructura({ children }: { children: ReactNode }) {
   const [menuAbierto, setMenuAbierto] = useState(false);
 
+  useEffect(() => {
+    if (!menuAbierto) return;
+
+    const overflowAnterior = document.body.style.overflow;
+    const cerrarConEscape = (evento: KeyboardEvent) => {
+      if (evento.key === "Escape") setMenuAbierto(false);
+    };
+
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", cerrarConEscape);
+    return () => {
+      document.body.style.overflow = overflowAnterior;
+      window.removeEventListener("keydown", cerrarConEscape);
+    };
+  }, [menuAbierto]);
+
   return (
     <div className="app-shell min-h-dvh lg:grid lg:grid-cols-[15rem_1fr]">
       {/* Barra superior en celulares */}
@@ -97,7 +113,7 @@ function Estructura({ children }: { children: ReactNode }) {
 
       <aside
         id="menu-lateral"
-        className={`sidebar-surface fixed inset-y-0 left-0 z-40 w-64 transition-transform lg:sticky lg:top-0 lg:h-dvh lg:w-auto lg:translate-x-0 ${
+        className={`sidebar-surface fixed inset-y-0 left-0 z-40 h-dvh w-[min(17rem,84vw)] overscroll-contain transition-transform lg:sticky lg:top-0 lg:h-dvh lg:w-auto lg:translate-x-0 ${
           menuAbierto ? "translate-x-0" : "-translate-x-full"
         }`}
       >

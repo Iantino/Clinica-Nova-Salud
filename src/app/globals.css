@@ -110,6 +110,7 @@ textarea:focus {
 @media (max-width: 1023px) {
   .app-canvas { min-height: calc(100dvh - 3.5rem); }
   .app-watermark { width: min(68vw, 24rem); top: -2rem; right: -6rem; }
+  .sidebar-surface { overflow-x: hidden; overflow-y: auto; }
 }
 @media print {
   @page { size: letter; margin: 14mm 16mm; }

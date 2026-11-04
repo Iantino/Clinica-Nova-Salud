@@ -34,7 +34,7 @@ function Pacientes() {
 
   return (
     <div className="mx-auto w-full max-w-[88rem]">
-      <header className="flex flex-wrap items-end justify-between gap-5">
+      <header className="flex flex-wrap items-start justify-between gap-4 sm:items-end sm:gap-5">
         <div>
           <p className="text-xs font-bold tracking-[0.16em] text-hoja uppercase">Atención clínica · directorio</p>
           <h1 className="mt-1 font-display text-4xl font-bold tracking-tight text-pino sm:text-5xl">Pacientes</h1>
@@ -45,7 +45,7 @@ function Pacientes() {
         {puedeRegistrar && (
           <Link
             href="/pacientes/nuevo"
-            className="group inline-flex items-center gap-2.5 rounded-xl bg-gradient-to-r from-[#075344] to-[#11765d] px-5 py-3 font-semibold text-white shadow-[0_9px_22px_rgba(7,83,68,0.2)] transition duration-200 hover:-translate-y-0.5 hover:from-[#06493c] hover:to-[#0c684f] hover:shadow-[0_13px_28px_rgba(7,83,68,0.28)] focus-visible:ring-2 focus-visible:ring-hoja/50 focus-visible:ring-offset-2 focus-visible:outline-none"
+            className="group inline-flex min-h-12 w-full items-center justify-center gap-2.5 rounded-xl bg-gradient-to-r from-[#075344] to-[#11765d] px-5 py-3 font-semibold text-white shadow-[0_9px_22px_rgba(7,83,68,0.2)] transition duration-200 hover:-translate-y-0.5 hover:from-[#06493c] hover:to-[#0c684f] hover:shadow-[0_13px_28px_rgba(7,83,68,0.28)] focus-visible:ring-2 focus-visible:ring-hoja/50 focus-visible:ring-offset-2 focus-visible:outline-none sm:w-auto"
           >
             <span className="grid size-7 place-items-center rounded-lg bg-white/15">
               <Icono nombre="pacientes" className="size-5" />
@@ -82,7 +82,39 @@ function Pacientes() {
       {error && <div className="mb-3"><Aviso>{error}</Aviso></div>}
 
       <div className="mt-2 overflow-hidden rounded-2xl border border-white/90 bg-white/90 p-2 shadow-[0_8px_26px_rgba(18,55,42,0.075)] ring-1 ring-pino/[0.035] backdrop-blur-sm sm:p-2.5" aria-busy={cargando}>
-        <div className="overflow-x-auto rounded-xl">
+        <div className="space-y-3 p-1 sm:hidden">
+          {datos?.datos.map((paciente, indice) => (
+            <article key={paciente.id} className="rounded-xl border border-tinta/10 bg-white p-4 shadow-sm">
+              <div className="flex items-center gap-3">
+                <span aria-hidden="true" className={`grid size-11 shrink-0 place-items-center rounded-full text-sm font-bold ${tonosAvatar[indice % tonosAvatar.length]}`}>
+                  {`${paciente.nombre[0] ?? ""}${paciente.apellido[0] ?? ""}`.toLocaleUpperCase("es-GT")}
+                </span>
+                <div className="min-w-0 flex-1">
+                  <Link href={`/pacientes/${paciente.id}`} className="block truncate font-semibold text-pino underline-offset-4 hover:text-hoja hover:underline focus-visible:ring-2 focus-visible:ring-hoja/40 focus-visible:outline-none">
+                    {paciente.apellido}, {paciente.nombre}
+                  </Link>
+                  <p className="mt-0.5 break-all text-sm text-tinta/60">DPI: {paciente.dpi ?? "Sin DPI"}</p>
+                </div>
+              </div>
+              <dl className="mt-3 grid grid-cols-2 gap-3 border-t border-tinta/10 pt-3">
+                <div>
+                  <dt className="text-[0.68rem] font-bold tracking-[0.08em] text-tinta/55 uppercase">Teléfono</dt>
+                  <dd className="mt-0.5 font-medium tabular-nums text-tinta">{paciente.telefono}</dd>
+                </div>
+                <div>
+                  <dt className="text-[0.68rem] font-bold tracking-[0.08em] text-tinta/55 uppercase">Edad</dt>
+                  <dd className="mt-0.5 font-medium tabular-nums text-tinta">{paciente.edad} años</dd>
+                </div>
+              </dl>
+              <div className="mt-3 flex justify-end gap-2 border-t border-tinta/10 pt-3">
+                <Link href={`/pacientes/${paciente.id}`} aria-label={`Ver ficha de ${paciente.nombre} ${paciente.apellido}`} title="Ver ficha" className="grid size-10 place-items-center rounded-xl bg-emerald-50 text-emerald-700 transition hover:bg-emerald-100 focus-visible:ring-2 focus-visible:ring-emerald-600/30 focus-visible:outline-none"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="size-5"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z"/><circle cx="12" cy="12" r="2.7"/></svg></Link>
+                {puedeRegistrar && <Link href={`/pacientes/${paciente.id}`} aria-label={`Editar ficha de ${paciente.nombre} ${paciente.apellido}`} title="Editar ficha" className="grid size-10 place-items-center rounded-xl bg-sky-50 text-sky-700 transition hover:bg-sky-100 focus-visible:ring-2 focus-visible:ring-sky-600/30 focus-visible:outline-none"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="size-5"><path d="m15 5 4 4M4 20l4.5-1 10.8-10.8a2.1 2.1 0 0 0-3-3L5.5 16 4 20Z"/></svg></Link>}
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <div className="hidden overflow-x-auto rounded-xl sm:block">
           <table className="w-full min-w-[880px] text-left">
             <thead className="border-b border-tinta/10 bg-[#f2f8f5] text-xs tracking-[0.07em] text-tinta/65 uppercase">
               <tr>
